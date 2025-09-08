@@ -1,0 +1,3 @@
+#copy file ini, rename ke .env, kemudian isi username dan password untuk akses admin blog page
+ADMIN_USERNAME=Username123
+ADMIN_PASSWORD=Password123
