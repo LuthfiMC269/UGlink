@@ -3,13 +3,20 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Gndr.link - Shortlink</title>
+    <meta name="description" content="Universitas Gunadarma Shortlink. From Student, For All.">
+    <title>Gundr.link - Shortlink</title>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("shortlinkForm");
             const urlInput = document.getElementById("urlInput");
             const slugInput = document.getElementById("slugInput");
             const resultDiv = document.getElementById("result");
+
+            slugInput.addEventListener("input", function () {
+                let value = slugInput.value;
+                // Ganti semua spasi dengan "-"
+                slugInput.value = value.replace(/\s+/g, "-");
+            });
 
             form.addEventListener("submit", async function (e) {
                 e.preventDefault();
@@ -50,7 +57,7 @@
                 class="w-16 h-16 lg:w-[87px] lg:h-[87px]"
         />
         <h1 class="text-2xl lg:text-[48px] font-bold text-black leading-none">
-            Gndr.link
+            Gundr.link
         </h1>
     </div>
 </header>
@@ -79,7 +86,7 @@
                         id="urlInput"
                         type="url"
                         required
-                        placeholder="https://contoh.com/link-yang-sangat-panjang"
+                        placeholder="https://contoh.com/link-sangat-panjang"
                         class="w-full border border-gray-300 rounded-[15px] p-3 lg:p-4 text-lg lg:text-[24px] h-[44px] bg-[#EFEFEF]"
                 />
             </div>
@@ -89,9 +96,9 @@
                 <label class="block text-lg lg:text-[24px] font-bold text-black mb-3 lg:mb-4">
                     Tautan kustom
                 </label>
-                <div class="flex flex-row items-center gap-4">
-                    <label class="block text-lg lg:text-[24px] font-bold text-black mb-3 lg:mb4">
-                        Gndr.link/
+                <div class="flex flex-row items-center">
+                    <label class="block text-lg lg:text-[24px] font-bold text-black p-1">
+                        Gundr.link/
                     </label>
                     <input id="slugInput" type="text" placeholder="short-links (opsional)"
                            class="w-full border h-[44px] border-gray-300 rounded-[15px] p-3 lg:p-4 text-lg lg:text-[24px] bg-[#EFEFEF]"/>
@@ -129,10 +136,10 @@
         </div>
         <div class="text-center lg:text-right">
             <p class="text-sm lg:text-[24px] font-normal">
-                @2025 lmcpsite.my.id All Right Reserved
+                <i class="bi bi-c-circle"></i> 2025 lmcpsite.my.id All Rights Reserved
             </p>
             <p>
-                Gndr.link is not affiliated with Gunadarma.ac.id administration team. contact lmcpsite for more info
+                Gundr.link is not affiliated with <a href="https://gunadarma.ac.id" class="underline hover:text-gray-200">Gunadarma.ac.id</a> administration team. Contact <a href="https://lmcpsite.my.id" class="underline hover:text-gray-200"> lmcpsite</a> for more info
             </p>
         </div>
     </div>
