@@ -6,3 +6,34 @@
 @layer theme{
     font-family: Urbanist;
 }
+    #mobileMenu {
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      display: none;
+    }
+    #mobileMenu.open {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+    }
+    #mobileMenu.closing {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .hamburger-line {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hamburger-active .line-1 {
+      transform: translateY(10.5px) rotate(45deg);
+    }
+    .hamburger-active .line-2 {
+      opacity: 0;
+    }
+    .hamburger-active .line-3 {
+      transform: translateY(-10.5px) rotate(-45deg);
+    }
+    html{
+        scroll-behavior: smooth;
+    }

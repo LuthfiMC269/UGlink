@@ -11,6 +11,8 @@
             const urlInput = document.getElementById("urlInput");
             const slugInput = document.getElementById("slugInput");
             const resultDiv = document.getElementById("result");
+            const menuButton = document.getElementById("menuButton");
+            const mobileMenu = document.getElementById("mobileMenu");
 
             slugInput.addEventListener("input", function () {
                 let value = slugInput.value;
@@ -39,6 +41,38 @@
                     resultDiv.innerHTML = `<p class="text-red-600">${data.message}</p>`;
                 }
             });
+
+            // Toggle menu mobile
+            function openMenu() {
+                mobileMenu.classList.remove("closing");
+                mobileMenu.style.display = "flex"; // tampil dulu
+                setTimeout(() => mobileMenu.classList.add("open"), 10);
+                menuButton.classList.add("hamburger-active");
+            }
+
+            function closeMenu() {
+                mobileMenu.classList.remove("open");
+                mobileMenu.classList.add("closing");
+                menuButton.classList.remove("hamburger-active");
+                mobileMenu.addEventListener("transitionend", function handler() {
+                    mobileMenu.style.display = "none"; // benar-benar sembunyi setelah animasi
+                    mobileMenu.removeEventListener("transitionend", handler);
+                });
+            }
+
+            menuButton.addEventListener("click", () => {
+                if (mobileMenu.classList.contains("open")) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            document.addEventListener("click", function (e) {
+                if (!mobileMenu.contains(e.target) && !menuButton.contains(e.target)) {
+                    if (mobileMenu.classList.contains("open")) closeMenu();
+                }
+            });
         });
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
@@ -49,7 +83,7 @@
 <body class="min-h-screen bg-gradient-to-b from-[#FEE9D8] to-[#E8E2F1] font-sans flex flex-col fl"
       style="font-family: Urbanist, sans-serif">
 <!-- Header -->
-<header class="flex items-center px-6 pt-12 pb-8 lg:px-24 lg:pt-12">
+<header class="flex items-center justify-between px-6 pt-10 pb-5 lg:px-24 lg:pt-12 sticky top-0 backdrop-blur-lg">
     <div class="flex items-center gap-4">
         <img
                 src="https://api.builder.io/api/v1/image/assets/TEMP/0829114a406b7bc1d6a533cc3e0c1ad64c401fa5?width=174"
@@ -60,10 +94,30 @@
             Gundr.link
         </h1>
     </div>
+    <!-- navbar desktop-->
+    <nav class="hidden md:flex text-2xl font-medium gap-6">
+        <a href="#Penggunaan">Penggunaan</a>
+        <a href="#Kontak">Kontak</a>
+    </nav>
+    <!-- navbar mobile-->
+    <div class="relative md:hidden">
+        <button id="menuButton" class="flex flex-col justify-center w-7 h-6 space-y-2">
+            <span class="hamburger-line line-1 block h-1 bg-black rounded"></span>
+            <span class="hamburger-line line-2 block h-1 bg-black rounded"></span>
+            <span class="hamburger-line line-3 block h-1 bg-black rounded"></span>
+        </button>
+
+        <!-- Popup Menu -->
+        <div id="mobileMenu"
+             class="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg p-4 flex flex-col gap-3 items-end text-right">
+            <a href="#Penggunaan" class="hover:text-gray-600 w-30">Penggunaan</a>
+            <a href="#Kontak" class="hover:text-gray-600 w-30">Kontak</a>
+        </div>
+    </div>
 </header>
 
 <!-- Main Content -->
-<main class="flex flex-col items-center justify-center px-6 py-8 lg:py-16">
+<main class="flex flex-col items-center justify-center px-6 pt-0 py-8 lg:py-16">
     <!-- Title Section -->
     <div class="text-center mb-8 lg:mb-16">
         <h2 class="text-2xl lg:text-[48px] font-bold text-black mb-2 lg:mb-4 leading-tight">
@@ -75,7 +129,7 @@
     </div>
 
     <!-- Form Container -->
-    <div class="w-full max-w-6xl bg-white rounded-[15px] shadow-lg p-6 lg:p-12">
+    <div class="w-full max-w-6xl bg-white rounded-[15px] shadow-lg p-6 mb-6 lg:p-12">
         <form id="shortlinkForm" class="space-y-6 lg:space-y-8">
             <!-- URL Input -->
             <div>
@@ -86,7 +140,7 @@
                         id="urlInput"
                         type="url"
                         required
-                        placeholder="https://contoh.com/link-sangat-panjang"
+                        placeholder="https://contoh.com/tautan-panjang"
                         class="w-full border border-gray-300 rounded-[15px] p-3 lg:p-4 text-lg lg:text-[24px] h-[44px] bg-[#EFEFEF]"
                 />
             </div>
@@ -106,7 +160,7 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="flex justify-center">
+            <div class="flex justify-center m-0">
                 <button
                         type="submit"
                         class="w-[311px] bg-[#525FE1] text-white font-bold rounded-[15px] py-3 lg:py-4 text-lg lg:text-[24px] hover:bg-[#4451D0]"
@@ -116,6 +170,58 @@
             </div>
             <div id="result" class="mt-4"></div>
         </form>
+    </div>
+    <!--Terms Of Service-->
+    <div id="Penggunaan" class="w-full max-w-6xl bg-white rounded-[15px] shadow-lg p-6 mb-6 lg:p-12">
+        <div class="mb-6">
+            <h2 class="text-2xl lg:text-[32px] font-bold text-black mb-2 lg:mb-4 leading-tight">
+                Kebijakan Penggunaan
+            </h2>
+            <label class="text-lg md:text-[24px]">
+                Aplikasi ini disediakan sebagai fasilitas untuk mempermudah penyingkatan tautan (link shortener) dan
+                dapat digunakan oleh seluruh sivitas <strong>Universitas Gunadarma</strong> maupun <strong>masyarakat
+                umum.</strong>
+            </label>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl lg:text-[32px] font-bold text-black mb-2 lg:mb-4 leading-tight">
+                Aturan Penggunaan
+            </h2>
+            <ul style="list-style-type: disc" class="text-lg md:text-[24px]">
+                <li>Dilarang menautkan yang mengarah ke konten negatif seperti, kekerasan, sara, atau pornografi
+                </li>
+                <li>Dilarang menautkan ke konten yang berbahaya entah perangkat lunak mencurigakan atau melanggar hak
+                    privasi seseorang
+                </li>
+                <li>Seluruh aktivitas dan tautan yang dibuat dari aplikasi ini merupakan tanggung jawab penuh pembuat
+                    tautan. Administrator tidak bertanggung jawab atas segala bentuk penyalahgunaan
+                </li>
+                <li>Administrator berhak menghapus tautan bila ditemukan pelanggaran aturan</li>
+                <li>Peraturan dapat berubah sewaktu-waktu</li>
+            </ul>
+        </div>
+        <h2 class="text-lg font-bold text-black mb-2 lg:mb-4 leading-tight">
+            Dengan menggunakan aplikasi ini, anda dianggap telah membaca dan menyetujui seluruh aturan diatas.
+        </h2>
+    </div>
+    <div id="Kontak" class="w-full max-w-6xl bg-white rounded-[15px] shadow-lg p-6 mb-6 lg:p-12">
+        <h2 class="text-2xl lg:text-[32px] font-bold text-black mb-2 lg:mb-4 leading-tight">
+            Kontak
+        </h2>
+        <h2 class="text-xl text-black leading-tight">
+            Aplikasi dibuat oleh: <a href="https://lmcpsite.my.id" class="underline text-blue-500 hover:text-blue-800">https://lmcpsite.my.id</a>
+        </h2>
+        <h2 class="text-xl text-black leading-tight">
+            Email: <a href="mailto:Luthfimc269@pm.me" class="underline text-blue-500 hover:text-blue-800">Luthfimc269@pm.me</a>
+        </h2>
+        <h2 class="text-xl text-black leading-tight mb-6">
+            Website ini dipersembahkan untuk kampusku, <a href="https://gunadarma.ac.id"
+                                                          class="underline text-blue-500 hover:text-blue-800">Gunadarma.ac.id</a>
+        </h2>
+        <h2 class="text-xl text-black leading-tight">
+            Website ini tidak berafiliasi dengan administrasi Universitas Gunadarma dan dikelola secara pribadi sampai
+            pemberitahuan selanjutnya. Silahkan hubungi kontak untuk informasi lebih lanjut.
+        </h2>
     </div>
 </main>
 <footer class="bg-[#231F40] text-white py-8 lg:py-12 px-6 lg:px-24 mt-auto">
@@ -139,7 +245,10 @@
                 <i class="bi bi-c-circle"></i> 2025 lmcpsite.my.id All Rights Reserved
             </p>
             <p>
-                Gundr.link is not affiliated with <a href="https://gunadarma.ac.id" class="underline hover:text-gray-200">Gunadarma.ac.id</a> administration team. Contact <a href="https://lmcpsite.my.id" class="underline hover:text-gray-200"> lmcpsite</a> for more info
+                Gundr.link is not affiliated with <a href="https://gunadarma.ac.id"
+                                                     class="underline hover:text-gray-200">Gunadarma.ac.id</a>
+                administration team. Contact <a href="https://lmcpsite.my.id" class="underline hover:text-gray-200">
+                lmcpsite</a> for more info
             </p>
         </div>
     </div>
