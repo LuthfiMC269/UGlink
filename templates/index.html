@@ -11,6 +11,8 @@
             const urlInput = document.getElementById("urlInput");
             const slugInput = document.getElementById("slugInput");
             const resultDiv = document.getElementById("result");
+            const resultQrDiv = document.getElementById("resultQr")
+            const divResult = document.getElementById("divResult")
             const menuButton = document.getElementById("menuButton");
             const mobileMenu = document.getElementById("mobileMenu");
 
@@ -35,11 +37,13 @@
                 });
                 const data = await response.json();
                 if (data.status === "success") {
-                    resultDiv.innerHTML = `<p class="text-green-600">Shortlink: <a href="${data.shortlink}" target="_blank" class="underline">${data.shortlink}</a></p>`;
+                    resultDiv.innerHTML = `<p class="text-black">${data.message}</p><p class="text-black">Link: <a href="${data.shortlink}" target="_blank" class="underline">${data.shortlink}</a></p>`;
+                    resultQrDiv.innerHTML = `<p class="text-black flex flex-row">Kode QR: <img src="data:image/png;base64,${data.qrimage}" alt="QR Code" class=" ml-2 w-40 h-40"></p>`;
                     form.reset();
                 } else {
                     resultDiv.innerHTML = `<p class="text-red-600">${data.message}</p>`;
                 }
+                divResult.classList.add("bg-green-200");
             });
 
             // Toggle menu mobile
@@ -55,7 +59,7 @@
                 mobileMenu.classList.add("closing");
                 menuButton.classList.remove("hamburger-active");
                 mobileMenu.addEventListener("transitionend", function handler() {
-                    mobileMenu.style.display = "none"; // benar-benar sembunyi setelah animasi
+                    mobileMenu.style.display = "none";
                     mobileMenu.removeEventListener("transitionend", handler);
                 });
             }
@@ -130,7 +134,7 @@
 
     <!-- Form Container -->
     <div class="w-full max-w-6xl bg-white rounded-[15px] shadow-lg p-6 mb-6 lg:p-12">
-        <form id="shortlinkForm" class="space-y-6 lg:space-y-8">
+        <form id="shortlinkForm" class="space-y-6">
             <!-- URL Input -->
             <div>
                 <label class="block text-lg lg:text-[24px] font-bold text-black mb-3 lg:mb-4">
@@ -160,7 +164,7 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="flex justify-center m-0">
+            <div class="flex justify-center mb-3">
                 <button
                         type="submit"
                         class="w-[311px] bg-[#525FE1] text-white font-bold rounded-[15px] py-3 lg:py-4 text-lg lg:text-[24px] hover:bg-[#4451D0]"
@@ -168,7 +172,10 @@
                     <i class="bi bi-link-45deg text-white"></i> Perpendek tautan
                 </button>
             </div>
-            <div id="result" class="mt-4"></div>
+            <div id="divResult" class="rounded-[15px] flex md:flex-row flex-col items-start justify-between">
+                <div id="result" class="m-4 text-md lg:text-[24px] text-white"></div>
+                <div id="resultQr" class="m-4 text-md lg:text-[24px] text-white"></div>
+            </div>
         </form>
     </div>
     <!--Terms Of Service-->

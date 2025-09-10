@@ -2,7 +2,11 @@ import os
 from flask import Flask, request, redirect, render_template, url_for, flash, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 import string, random
+import qrcode
+import base64
+from qrcode.image.pil import PilImage
 from dotenv import load_dotenv
+from io import BytesIO
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///UGlink.db"
@@ -20,7 +24,10 @@ class ShortLink(db.Model):
     original_url = db.Column(db.String(500), nullable=False)
 
 def generate_slug(length=6):
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    slug =''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    if ShortLink.query.filter_by(slug=slug).first():
+        generate_slug()
+    return slug
 
 @app.route("/", methods=["GET"])
 def index():
@@ -33,22 +40,17 @@ def create_shortlink():
         data = request.get_json()
         original_url = data.get("url")
         custom_slug = data.get("slug")
-    else:
-        # fallback kalau form biasa
-        original_url = request.form.get("url")
-        custom_slug = request.form.get("slug")
+
 
     if not original_url:
         if request.is_json:
             return jsonify({"status": "error", "message": "URL tidak boleh kosong"}), 400
-        flash("URL tidak boleh kosong!", "error")
         return redirect(url_for("index"))
 
     slug = custom_slug or generate_slug()
     if ShortLink.query.filter_by(slug=slug).first():
         if request.is_json:
             return jsonify({"status": "error", "message": "Slug sudah dipakai"}), 400
-        flash("Slug sudah dipakai, silakan pilih yang lain.", "error")
         return redirect(url_for("index"))
 
     new_link = ShortLink(slug=slug, original_url=original_url)
@@ -56,13 +58,17 @@ def create_shortlink():
     db.session.commit()
 
     if request.is_json:
+        qrimg = qrcode.make(f"{request.host_url}{slug}", image_factory=PilImage)
+        buffer = BytesIO()
+        qrimg.save(buffer, format ="PNG")
+        buffer.seek(0)
+        qr_base64 = base64.b64encode(buffer.read()).decode("utf-8")
         return jsonify({
             "status": "success",
             "message": "Shortlink berhasil dibuat",
-            "shortlink": f"{request.host_url}{slug}"
+            "shortlink": f"{request.host_url}{slug}",
+            "qrimage": f"{qr_base64}"
         })
-
-    flash(f"Shortlink berhasil dibuat: {request.host_url}{slug}", "success")
     return redirect(url_for("index"))
 
 @app.route("/delete/<int:link_id>")
@@ -112,4 +118,4 @@ def admin():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
