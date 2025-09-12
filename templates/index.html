@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content="Universitas Gunadarma Shortlink. From Student, For All."/>
+    <meta name="description" content="Link Shortener Untuk Seluruh Sivitas Universitas Gunadarma."/>
     <title>Gundr.link - Shortlink</title>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -44,6 +44,7 @@
                     resultDiv.innerHTML = `<p class="text-red-600">${data.message}</p>`;
                 }
                 divResult.classList.add("bg-green-200");
+                divResult.classList.remove("hidden");
             });
 
             // Toggle menu mobile
@@ -172,7 +173,7 @@
                     <i class="bi bi-link-45deg text-white"></i> Perpendek tautan
                 </button>
             </div>
-            <div id="divResult" class="rounded-[15px] flex md:flex-row flex-col items-start justify-between">
+            <div id="divResult" class="hidden rounded-[15px] flex md:flex-row flex-col items-start justify-between">
                 <div id="result" class="m-4 text-md lg:text-[24px] text-white"></div>
                 <div id="resultQr" class="m-4 text-md lg:text-[24px] text-white"></div>
             </div>
